@@ -1,0 +1,40 @@
+---
+- name: Get uname
+  shell: uname -r
+  register: uname
+
+- name: Get Codename
+  shell: lsb_release -cs
+  register: codename
+
+- name: codename details
+  debug:
+    msg: " codename value {{ codename.stdout }}"
+
+- name: extra packages for Ubuntu
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - linux-image-extra-virtual
+    - linux-image-extra-{{uname.stdout}}
+
+
+# Add specified repository into sources list.
+#- name: add docker repository for Ubuntu
+#  apt_repository:
+#    repo: deb https://download.docker.com/linux/ubuntu {{codename.stdout}} stable
+#    state: present
+
+- name: add docker repository for Ubuntu
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+#- name: add key id
+#  apt_key:
+#    url: "https://download.docker.com/linux/ubuntu/gpg"
+#    state: present
+
+- name: add key id
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+

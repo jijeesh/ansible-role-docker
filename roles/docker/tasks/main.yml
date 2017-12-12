@@ -1,4 +1,8 @@
 ---
+- name: OS details
+  debug:
+    msg: "System OS Family {{ ansible_os_family }}"
+
 - name: Install docker and dependencies
   include: "os_family/{{ ansible_os_family }}.yml"
 

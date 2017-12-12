@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: system026
   remote_user: root
   roles:
-    - ../
+    - docker
